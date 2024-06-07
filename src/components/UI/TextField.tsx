@@ -1,4 +1,4 @@
-import { cn } from "../../cn";
+import { cn } from "../../utils";
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement>{
   

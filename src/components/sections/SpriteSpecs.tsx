@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { SpriteFields } from "../../models/theme";
 import EditIcon from "../icons/EditIcon";
 import EyeIcon from "../icons/EyeIcon";
-import { cn } from "../../cn";
+import { cn } from "../../utils";
 
 interface SpriteSpecificationsProps {
   spriteName: string

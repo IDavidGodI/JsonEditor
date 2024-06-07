@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import PlusIcon from "../icons/PlusIcon";
-import { cn } from "../../cn";
+import { cn } from "../../utils";
 import ExpandButton from "../UI/ExpandButton";
 
 interface PreviewSectionProps extends React.PropsWithChildren{

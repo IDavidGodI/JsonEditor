@@ -1,7 +1,7 @@
 import { Editor, EditorProps, OnMount } from "@monaco-editor/react";
 import {  useEffect, useRef, useState } from "react";
 import {editor} from "monaco-editor"
-import { cn } from "../cn";
+import { cn } from "../utils";
 
 interface JsonEditorProps extends EditorProps {
   tabs: TabProps[]

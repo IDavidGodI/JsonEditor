@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { cn } from "../../cn";
+import { cn, formatKeyName } from "../../utils";
 
 interface KeyRenameProps {
   name: string
@@ -9,6 +9,7 @@ interface KeyRenameProps {
 const KeyRename = ({name,updateName}: KeyRenameProps) => {
   const nameRef = useRef<HTMLInputElement>(null)
   const [isSelected, setIsSelected] = useState(false)
+  const [value, setValue] = useState(name)
   const [isError, setIsError] = useState(false)
 
   const addEvents = () =>{
@@ -21,13 +22,11 @@ const KeyRename = ({name,updateName}: KeyRenameProps) => {
   }
 
   const changeName = () =>{
-    if (nameRef.current){
-      const { value } = nameRef.current
-      if (value){
-        updateName(value.toLowerCase(), name)
-        setIsSelected(false)
-        removeEvents()
-      }
+    const fieldValue = nameRef.current?.value
+    if (fieldValue){
+      updateName(formatKeyName(fieldValue), name)
+      setIsSelected(false)
+      removeEvents()
     }
   }
 
@@ -58,14 +57,16 @@ const KeyRename = ({name,updateName}: KeyRenameProps) => {
     <>
       {
         isSelected ?
-          <form className="flex flex-col">
+          <form  className="flex flex-col">
             <input className={cn("outline-none border-2",{
               "border-b-2 border-red-500": isError
-            })} defaultValue={name}
+            })} 
               onChange={(e)=>{
                 if (e.target.value) setIsError(false)
                 else setIsError(true)
+                setValue(formatKeyName(e.target.value))
               }}
+              value={value}
               ref={nameRef}
             />
             {

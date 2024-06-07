@@ -7,6 +7,7 @@ import TrashIcon from "../icons/TrashIcon"
 import NewColorForm from "../forms/NewColor"
 import PreviewSection from "./PreviewSection"
 import KeyRename from "./KeyRename"
+import ConfirmDialog from "../UI/ConfirmDialog"
 
 export interface ColorPaletteSectionProps {
   setLoadedFile: React.Dispatch<ThemeFields>
@@ -20,13 +21,21 @@ export interface ColorPaletteSectionProps {
 const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, closeFloating}: ColorPaletteSectionProps) => {
   const [paletteSelected, setPaletteSelected] = useState("")
   const selectedRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(()=>{
     if (selectedRef?.current){
+      
       selectedRef.current.scrollIntoView(false)
     }
   },[paletteSelected])
 
+  const deleteAction = (name: string) => {
+    if (loadedFile) {
+      delete loadedFile.colorPalette?.[name]
+      setLoadedFile(loadedFile)
+    }
+  }
   const colorChanged = (colorField: colorPaletteFields) => {
     if (!loadedFile)
       return setLoadedFile({ colorPalette: colorField })
@@ -38,8 +47,13 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
       }
     })
   }
-  const handleDelete = ()=>{
-    
+  const handleDelete = (name: string)=>{
+    setFloating(
+      <ConfirmDialog acceptAction={()=>{
+        deleteAction(name)
+        closeFloating()
+      }} cancelAction={closeFloating} message={`Do you want to delete the color set "${name}"`}/>
+    )
   }
   const nameChanged = (name: string, old: string) => {
     if (loadedFile && name !== old) {
@@ -69,9 +83,9 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
       
       {
         colorPaletteEntries &&
-        <>
+        <section ref={sectionRef}>
           {
-            colorPaletteEntries.length &&
+            !!colorPaletteEntries.length &&
             colorPaletteEntries.map(([colorName, field]) => {
               
               const isSelected = paletteSelected === colorName
@@ -112,7 +126,7 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
                       <KeyRename name={colorName} updateName={nameChanged}/>
                     </span>
 
-                    <span className="hover:text-red-500" onClick={handleDelete}>
+                    <span className="hover:text-red-500" onClick={()=>handleDelete(colorName)}>
                       <TrashIcon className="w-6 h-6" />
                     </span>
 
@@ -120,14 +134,17 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
                   <div {...{ref: isSelected? selectedRef : null}} onClick={() => setPaletteSelected((current)=>{
                     if (current===colorName) return ""
                     return colorName
-                  })} className="h-16 w-full flex items-center p-1 justify-between cursor-pointer hover:bg-black/25" style={{ backgroundColor: field?.bgColor, color: field?.fontColor }}>
+                  })} className="h-16 w-full p-1  cursor-pointer hover:bg-black/20">
+                    <div className="w-full h-full flex items-center p-1 justify-between" style={{ backgroundColor: field?.bgColor, color: field?.fontColor }}>
+
                     {
                       field.bgColor ?
-                        <p className="font-bold text-2xl align-baseline">
+                      <p className="font-bold text-2xl align-baseline">
                           Aa
                         </p>
-                        : "Missing bgColor"
-                    }
+                        : "Missing colors"
+                        }
+                    </div>
 
                   </div>
                 </div>
@@ -137,7 +154,7 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
             
           }
 
-        </> 
+        </section> 
         
       }
       {

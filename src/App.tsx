@@ -5,7 +5,7 @@ import { OnChange } from "@monaco-editor/react"
 import { ThemeFields } from "./models/theme";
 import CloudIcons from "./components/icons/CloudIcons";
 import XIcon from "./components/icons/XIcon";
-import { cn } from "./cn";
+import { cn } from "./utils";
 import Button from "./components/UI/Button";
 
 function isValidJson(jsonText: string): boolean {
@@ -27,7 +27,7 @@ const FloatingElement = ({ children, open, close }: FloatingProps & { close: () 
 
   return open && (
     
-    <div className="backdrop-blur-lg bg-black/50 w-screen h-screen fixed top-0 flex items-center justify-center" >
+    <div className="z-50 backdrop-blur-lg bg-black/50 w-screen h-screen fixed top-0 flex items-center justify-center" >
       <div className="bg-white rounded-lg border-2 p-2" >
         <div className="flex justify-end">
 

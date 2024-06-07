@@ -1,4 +1,4 @@
-import { cn } from "../../cn";
+import { cn } from "../../utils";
 import PlusIcon from "../icons/PlusIcon";
 
 interface ExpandButtonProps  {

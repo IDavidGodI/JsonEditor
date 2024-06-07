@@ -2,6 +2,7 @@ import { useState } from "react"
 import { colorPaletteField, colorPaletteFields } from "../../models/theme"
 import ColorSelector from "./ColorSelect"
 import TextField from "../UI/TextField"
+import { formatKeyName } from "../../utils"
 
 interface NewColorFormProps {
   addColor: (colorField: colorPaletteFields) => void
@@ -34,7 +35,8 @@ const NewColorForm = ({ addColor, afterSubmit }: NewColorFormProps) => {
   }
 
   const fieldChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFields({ ...fields, name: e.target.value })
+    
+    setFields({ ...fields, name: formatKeyName(e.target.value) })
   }
   const colorChangeEvent = (field: string, color: string) => {
     setFields({ ...fields, [field]: color })

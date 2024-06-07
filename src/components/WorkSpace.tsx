@@ -5,7 +5,7 @@ import ColorPaletteSection, { ColorPaletteSectionProps } from "./sections/ColorP
 import PiecesSection from "./sections/PiecesSection";
 import BoardSection from "./sections/BoardSection";
 import { useState } from "react";
-import { cn } from "../cn";
+import { cn } from "../utils";
 import Button from "./UI/Button";
  
 

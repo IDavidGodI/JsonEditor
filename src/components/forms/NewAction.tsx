@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { ActionField, ActionFields } from "../../models/theme"
 import TextField from "../UI/TextField"
-import { cn } from "../../cn"
+import { cn, formatKeyName } from "../../utils"
 
 interface NewActionFormProps {
   addAction: (fields: ActionFields) => void
@@ -39,7 +39,7 @@ const NewActionForm = ({ addAction, afterSubmit, defaultValues}: NewActionFormPr
   const fieldChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value} = e.target;
     const { name } = e.target;
-    if (name==="name") value = value.toLowerCase()
+    if (name==="name") value = formatKeyName(value)
     if (name==="frames" || name==="fps"){
       const numericValue = Number(value)
       

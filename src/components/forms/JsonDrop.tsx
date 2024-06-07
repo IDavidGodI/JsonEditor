@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone'
 import CloudIcons from '../icons/CloudIcons';
-import { cn } from '../../cn';
+import { cn } from '../../utils';
 
 interface JsonDropProps<T> {
   setFile: React.Dispatch<T>

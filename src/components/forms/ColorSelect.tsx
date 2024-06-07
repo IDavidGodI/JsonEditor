@@ -1,7 +1,7 @@
 import { ColorResult, Sketch, SketchProps } from '@uiw/react-color';
 
 import { forwardRef, useImperativeHandle, useState } from 'react';
-import { cn } from '../../cn';
+import { cn } from '../../utils';
 
 
 
