@@ -16,7 +16,7 @@ const PreviewSection = ({level=0,children, defaultOpen, title, setFloating, addF
   const sectionRef = useRef<HTMLDivElement>(null);
   
   useEffect(()=>{
-    if (open && sectionRef.current) sectionRef.current.scrollIntoView()
+    if (open && sectionRef.current) sectionRef.current.scrollIntoView({block:"center"})
   },[open])
 
   return ( 

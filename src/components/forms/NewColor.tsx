@@ -1,11 +1,11 @@
 import { useState } from "react"
-import { colorPaletteField, colorPaletteFields } from "../../models/theme"
+import { ColorSettingField, ColorSettingFields } from "../../models/theme"
 import ColorSelector from "./ColorSelect"
 import TextField from "../UI/TextField"
 import { formatKeyName } from "../../utils"
 
 interface NewColorFormProps {
-  addColor: (colorField: colorPaletteFields) => void
+  addColor: (colorField: ColorSettingFields) => void
   afterSubmit: () => void
 }
 interface NewColorFormFields {
@@ -25,7 +25,7 @@ const NewColorForm = ({ addColor, afterSubmit }: NewColorFormProps) => {
     e.preventDefault()
     if (!fields.name) return
     const { name, bgColor, fontColor } = fields
-    const fieldSet: colorPaletteField = {}
+    const fieldSet: ColorSettingField = {}
 
     if (bgColor) fieldSet.bgColor = bgColor
     if (fontColor) fieldSet.fontColor = fontColor

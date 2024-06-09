@@ -21,17 +21,19 @@ export interface BoardFields{
   spriteSpecs?: SpriteFields
 }
 
-export interface colorPaletteField{
+export interface ColorSettingField{
   bgColor?: string
   fontColor?: string
 }
 
-export interface colorPaletteFields{
-  [key: string]: colorPaletteField  
+export interface ColorSettingFields{
+  [key: string]: ColorSettingField  
 }
 
 export interface ThemeFields{
   pieces?: PiecesFields
   board?: BoardFields
-  colorPalette?: colorPaletteFields
+  colorSettings?: ColorSettingFields
 }
+
+

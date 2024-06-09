@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from "react"
 import XIcon from "../icons/XIcon"
 import ColorSelector from "../forms/ColorSelect"
 import { ColorResult } from "@uiw/react-color"
-import { ThemeFields, colorPaletteFields } from "../../models/theme"
+import { ThemeFields, ColorSettingFields } from "../../models/theme"
 import TrashIcon from "../icons/TrashIcon"
 import NewColorForm from "../forms/NewColor"
 import PreviewSection from "./PreviewSection"
 import KeyRename from "./KeyRename"
 import ConfirmDialog from "../UI/ConfirmDialog"
 
-export interface ColorPaletteSectionProps {
+export interface ColorSettingSectionProps {
   setLoadedFile: React.Dispatch<ThemeFields>
   loadedFile: ThemeFields | null
   file: ThemeFields
@@ -18,8 +18,8 @@ export interface ColorPaletteSectionProps {
   floating: React.ReactNode
 }
  
-const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, closeFloating}: ColorPaletteSectionProps) => {
-  const [paletteSelected, setPaletteSelected] = useState("")
+const ColorSettingSection = ({file, loadedFile, setLoadedFile, setFloating, closeFloating}: ColorSettingSectionProps) => {
+  const [paletteSelected, setSettingSelected] = useState("")
   const selectedRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
@@ -32,17 +32,17 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
 
   const deleteAction = (name: string) => {
     if (loadedFile) {
-      delete loadedFile.colorPalette?.[name]
+      delete loadedFile.colorSettings?.[name]
       setLoadedFile(loadedFile)
     }
   }
-  const colorChanged = (colorField: colorPaletteFields) => {
+  const colorChanged = (colorField: ColorSettingFields) => {
     if (!loadedFile)
-      return setLoadedFile({ colorPalette: colorField })
+      return setLoadedFile({ colorSettings: colorField })
 
     setLoadedFile({
-      ...loadedFile, colorPalette: {
-        ...loadedFile.colorPalette,
+      ...loadedFile, colorSettings: {
+        ...loadedFile.colorSettings,
         ...colorField
       }
     })
@@ -57,16 +57,16 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
   }
   const nameChanged = (name: string, old: string) => {
     if (loadedFile && name !== old) {
-      const oldValue = loadedFile.colorPalette?.[old]
+      const oldValue = loadedFile.colorSettings?.[old]
       if (oldValue) {
         const newValue = {
           ...loadedFile,
-          colorPalette: {
-            ...loadedFile.colorPalette,
+          colorSettings: {
+            ...loadedFile.colorSettings,
             [name]: oldValue
           }
         }
-        delete newValue.colorPalette?.[old]
+        delete newValue.colorSettings?.[old]
 
         setLoadedFile(newValue)
       }
@@ -74,19 +74,19 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
     }
   }
 
-  let colorPaletteEntries
-  if(file.colorPalette) colorPaletteEntries = Object.entries(file.colorPalette)
+  let colorSettingsEntries
+  if(file.colorSettings) colorSettingsEntries = Object.entries(file.colorSettings)
   return ( 
-    <PreviewSection title="ColorPalette" setFloating={setFloating} addForm={
+    <PreviewSection title="Color settings" setFloating={setFloating} addForm={
       <NewColorForm addColor={colorChanged} afterSubmit={closeFloating} />
     }>
       
       {
-        colorPaletteEntries &&
+        colorSettingsEntries &&
         <section ref={sectionRef}>
           {
-            !!colorPaletteEntries.length &&
-            colorPaletteEntries.map(([colorName, field]) => {
+            !!colorSettingsEntries.length &&
+            colorSettingsEntries.map(([colorName, field]) => {
               
               const isSelected = paletteSelected === colorName
               return (
@@ -95,7 +95,7 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
                     isSelected &&
                     <div className="flex justify-end">
                       <div className="p-2 text-red-600 hover:text-black " onMouseUp={() => {
-                        setPaletteSelected("")
+                        setSettingSelected("")
                       }}>
                         <XIcon className="w-12 h-12" />
                       </div>
@@ -131,14 +131,14 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
                     </span>
 
                   </div>
-                  <div {...{ref: isSelected? selectedRef : null}} onClick={() => setPaletteSelected((current)=>{
+                  <div {...{ref: isSelected? selectedRef : null}} onClick={() => setSettingSelected((current)=>{
                     if (current===colorName) return ""
                     return colorName
                   })} className="h-16 w-full p-1  cursor-pointer hover:bg-black/20">
                     <div className="w-full h-full flex items-center p-1 justify-between" style={{ backgroundColor: field?.bgColor, color: field?.fontColor }}>
 
                     {
-                      field.bgColor ?
+                      (field.bgColor || field.fontColor) ?
                       <p className="font-bold text-2xl align-baseline">
                           Aa
                         </p>
@@ -158,7 +158,7 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
         
       }
       {
-        (!colorPaletteEntries || !colorPaletteEntries.length) &&
+        (!colorSettingsEntries || !colorSettingsEntries.length) &&
         <p className="font-bold text-slate-400 text-center p-2">There're no colors set</p>
       }
       
@@ -166,4 +166,4 @@ const ColorPaletteSection = ({file, loadedFile, setLoadedFile, setFloating, clos
    );
 }
  
-export default ColorPaletteSection;
+export default ColorSettingSection;

@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react"
-import JsonEditor, { TabProps } from "./components/JsonEditor"
+import CodeEditor, { TabProps } from "./components/CodeEditor"
 import WorkSpace from "./components/WorkSpace"
 import { OnChange } from "@monaco-editor/react"
 import { ThemeFields } from "./models/theme";
@@ -7,6 +7,8 @@ import CloudIcons from "./components/icons/CloudIcons";
 import XIcon from "./components/icons/XIcon";
 import { cn } from "./utils";
 import Button from "./components/UI/Button";
+import lodash from "lodash"
+import InfoDialog from "./components/UI/InfoDialog";
 
 function isValidJson(jsonText: string): boolean {
   try {
@@ -49,29 +51,47 @@ function App() {
   const [stableModified, setStableModified] = useState<ThemeFields>({})
   const [selectedTab, setSelectedTab] = useState("setup.json")
   const [showEditor, setShowEditor] = useState(!!localStorage.getItem("showEditor"))
+  const [madeChanges, setMadeChanges] = useState(false)
 
   const [floating, setFloating] = useState<FloatingProps>()
   const setFloat = (children: ReactNode)=>{
     setFloating({open:true, children})
   }
+
+  const save = ()=>{
+    if (isValidJson(modified)){
+      setLoadedFile(stableModified)
+    }else{
+      setFloat(
+        <InfoDialog close={closeFloating} message="Couldn't save, invalid json"/>
+      )
+    }
+  }
+
   const onEditorChange: OnChange = (e)=>{
     if (e){
       setModified(e)
-      if (isValidJson(e)) setStableModified(JSON.parse(e))
+      if (isValidJson(e)) {
+        const parsedModified = JSON.parse(e)
+        setStableModified(parsedModified)
+
+      }
+      else{
+        setMadeChanges(true)
+      }
+
+      
     }
       
   }
 
-  // useEffect(()=>{
-  //   if (selectedTab==="setup.json"){
-  //     setLoadedFile(stableModified)
-  //   }
-  // }, [stableModified])
+  useEffect(()=>{
+    if (!lodash.isEqual(stableModified, loadedFile || {})) setMadeChanges(true)
+    else setMadeChanges(false)
+  }, [stableModified])
+
   const closeFloating = () => setFloating({ open: false })
 
-  useEffect(()=>{
-
-  },[loadedFile, mainFile])
   const HandleDownload = ()=>{
     const blob = new Blob([modified], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);
@@ -85,14 +105,18 @@ function App() {
   const tabs: TabProps[] = [
     {
       tabName: "setup.json",
-      value: loadedFile ? JSON.stringify(loadedFile) : "{}"
+      value: loadedFile ? JSON.stringify(loadedFile) : "{}",
+      language: "json",
+      madeChanges
     }
   ]
   if (mainFile) tabs.push({
     tabName: "main.setup.json",
-    value: JSON.stringify(mainFile)
+    value: JSON.stringify(mainFile),
+    language: "json",
+    readonly: true
   })
-
+  
   const validJson = isValidJson(modified)
   const file = { ...mainFile, ...stableModified }
   return (
@@ -125,10 +149,11 @@ function App() {
       })}>
         <div className="grow overflow-y-hidden">
 
-        <JsonEditor tabs={tabs}
+        <CodeEditor tabs={tabs}
           setTab={setSelectedTab}
           tab={ selectedTab}
          onChange={onEditorChange}
+         saveAction={save}
           />
         </div>
         <div className="h-12 bg-slate-200 flex items-center justify-center">
@@ -139,7 +164,7 @@ function App() {
               <div className="flex gap-x-2 h-full items-center justify-center hover:animate-pulse">
                 <div className="h-full w-auto">
                   
-                  <CloudIcons download/>
+                  <CloudIcons type="download"/>
                 </div>
                 <p className="font-bold">
 

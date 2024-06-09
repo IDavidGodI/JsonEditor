@@ -35,7 +35,7 @@ const JsonDrop = <T,>({ setFile, placeholder }: JsonDropProps<T>) => {
 
         <div className={cn("w-10 h-10",{
           "animate-bounce text-cyan-400": isDragActive})}>
-        <CloudIcons upload/>
+        <CloudIcons type='upload'/>
       </div>
       {
         
