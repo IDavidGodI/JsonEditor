@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 
-import { ThemeFields, ColorSchemaFields, ColorSettingField } from "../../models/theme"
+import { ThemeFields, ColorSchemeFields, ColorSettingField } from "../../models/theme"
 
 import NewColorForm from "../forms/NewColor"
 import PreviewSection from "./PreviewSection"
@@ -18,45 +18,45 @@ export interface ColorSettingSectionProps {
 }
  
 const ColorSettingSection = ({file, loadedFile, setLoadedFile, setFloating, closeFloating}: ColorSettingSectionProps) => {
-  const [selectedSchema, setSelectedSchema] = useState("")
+  const [selectedScheme, setSelectedScheme] = useState("")
   const sectionRef = useRef<HTMLDivElement>(null)
   
 
   const deleteAction = (name: string) => {
     if (loadedFile) {
-      delete loadedFile.colorSettings?.schemas?.[name]
+      delete loadedFile.colorSettings?.schemes?.[name]
       setLoadedFile(loadedFile)
     }
   }
-  const defaultColorChanged = (colorSchema: ColorSchemaFields)=>{
+  const defaultColorChanged = (colorScheme: ColorSchemeFields)=>{
     if (!loadedFile)
       return setLoadedFile({
         colorSettings: {
-          ...colorSchema
+          ...colorScheme
         }
       })
 
     setLoadedFile({
       ...loadedFile, colorSettings: {
         ...loadedFile.colorSettings,
-        ...colorSchema
+        ...colorScheme
       }
     })
   }
-  const schemaColorChanged = (colorSchema: ColorSchemaFields) => {
+  const schemeColorChanged = (colorScheme: ColorSchemeFields) => {
     if (!loadedFile)
       return setLoadedFile({
         colorSettings: {
-          schemas: {...colorSchema}
+          schemes: {...colorScheme}
         }
       })
 
     setLoadedFile({
       ...loadedFile, colorSettings: {
         ...loadedFile.colorSettings,
-        schemas:{
-          ...loadedFile.colorSettings?.schemas,
-          ...colorSchema
+        schemes:{
+          ...loadedFile.colorSettings?.schemes,
+          ...colorScheme
         }
       }
     })
@@ -71,7 +71,7 @@ const ColorSettingSection = ({file, loadedFile, setLoadedFile, setFloating, clos
   }
   const nameChanged = (name: string, old: string) => {
     if (loadedFile && name !== old) {
-      const oldValue = loadedFile.colorSettings?.schemas?.[old]
+      const oldValue = loadedFile.colorSettings?.schemes?.[old]
       if (oldValue) {
         const newValue = {
           ...loadedFile,
@@ -80,7 +80,7 @@ const ColorSettingSection = ({file, loadedFile, setLoadedFile, setFloating, clos
             [name]: oldValue
           }
         }
-        delete newValue.colorSettings?.schemas?.[old]
+        delete newValue.colorSettings?.schemes?.[old]
 
         setLoadedFile(newValue)
       }
@@ -90,22 +90,22 @@ const ColorSettingSection = ({file, loadedFile, setLoadedFile, setFloating, clos
 
   
 
-  let defaultColorSchema: ColorSettingField | undefined, colorSchemas
-  if(file.colorSettings?.schemas) colorSchemas = Object.entries(file.colorSettings.schemas)
-  if (file.colorSettings?.defaultSchema) defaultColorSchema = file.colorSettings.defaultSchema
+  let defaultColorScheme: ColorSettingField | undefined, colorSchemes
+  if(file.colorSettings?.schemes) colorSchemes = Object.entries(file.colorSettings.schemes)
+  if (file.colorSettings?.defaultScheme) defaultColorScheme = file.colorSettings.defaultScheme
   return ( 
     <PreviewSection title="Color settings" >
         <section ref={sectionRef}>
             <div className="border-b-2">
 
             {
-              defaultColorSchema?
+              defaultColorScheme?
               <ColorSetting
-                field={defaultColorSchema}
-                colorName={"defaultSchema"}
-                selected={selectedSchema}
-                unsetSelected={() => setSelectedSchema("")}
-                setSelected={setSelectedSchema}
+                field={defaultColorScheme}
+                colorName={"defaultScheme"}
+                selected={selectedScheme}
+                unsetSelected={() => setSelectedScheme("")}
+                setSelected={setSelectedScheme}
                 changeColor={defaultColorChanged}
                 changeName={nameChanged}
                 deleteColor={handleDelete}
@@ -113,31 +113,31 @@ const ColorSettingSection = ({file, loadedFile, setLoadedFile, setFloating, clos
               :
               <div className="flex justify-center">
                 <span className="font-bold text-slate-400 p-2 hover:underline cursor-pointer" onClick={() => setFloating(
-                  <NewColorForm addColor={defaultColorChanged} afterSubmit={closeFloating} defaultSchema mandatoryColors/>
-                )}>Add default color schema</span>
+                  <NewColorForm addColor={defaultColorChanged} afterSubmit={closeFloating} defaultScheme mandatoryColors/>
+                )}>Add default color scheme</span>
               </div>
             }
           </div>
-        <PreviewSection title="Schemas" level={4} setFloating={setFloating} addForm={
-          <NewColorForm addColor={schemaColorChanged} afterSubmit={closeFloating} />
+        <PreviewSection title="Schemes" level={4} setFloating={setFloating} addForm={
+          <NewColorForm addColor={schemeColorChanged} afterSubmit={closeFloating} mandatoryColors/>
         }>
 
           
           {
-            colorSchemas &&
-            !!colorSchemas.length &&
-            colorSchemas.map(([colorName, field]) => {
+            colorSchemes &&
+            !!colorSchemes.length &&
+            colorSchemes.map(([colorName, field]) => {
               return (
                 <ColorSetting
                   key={colorName} 
                   field={field} 
                   colorName={colorName} 
-                  selected={selectedSchema}
+                  selected={selectedScheme}
                   canBeDeleted
-                  defaultSchema={defaultColorSchema}
-                  unsetSelected={()=>setSelectedSchema("")}
-                  setSelected={setSelectedSchema}
-                  changeColor={schemaColorChanged}
+                  defaultScheme={defaultColorScheme}
+                  unsetSelected={()=>setSelectedScheme("")}
+                  setSelected={setSelectedScheme}
+                  changeColor={schemeColorChanged}
                   changeName={nameChanged}
                   deleteColor={handleDelete}
                 />
@@ -145,13 +145,14 @@ const ColorSettingSection = ({file, loadedFile, setLoadedFile, setFloating, clos
             })
             
             }
+          {
+            (!colorSchemes || !colorSchemes.length) &&
+            <p className="font-bold text-slate-400 text-center p-2">There're no schemes set</p>
+          }
           </PreviewSection >
 
         </section> 
-      {
-        (!colorSchemas || !colorSchemas.length) &&
-        <p className="font-bold text-slate-400 text-center p-2">There're no colors set</p>
-      }
+      
       
     </PreviewSection>
    );

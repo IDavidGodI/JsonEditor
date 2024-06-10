@@ -1,13 +1,13 @@
 import { useState } from "react"
-import { ColorSchemaFields, ColorSettingField } from "../../models/theme"
+import { ColorSchemeFields, ColorSettingField } from "../../models/theme"
 import ColorSelector from "./ColorSelect"
 import TextField from "../UI/TextField"
 import { formatKeyName } from "../../utils"
 
 interface NewColorFormProps {
-  addColor: (colorField: ColorSchemaFields) => void
+  addColor: (colorField: ColorSchemeFields) => void
   afterSubmit: () => void
-  defaultSchema?: boolean
+  defaultScheme?: boolean
   mandatoryColors?: boolean
 }
 interface NewColorFormFields {
@@ -15,27 +15,32 @@ interface NewColorFormFields {
   bgColor?: string
   fontColor?: string
 }
-const NewColorForm = ({ addColor, afterSubmit,defaultSchema, mandatoryColors }: NewColorFormProps) => {
+const NewColorForm = ({ addColor, afterSubmit,defaultScheme, mandatoryColors }: NewColorFormProps) => {
 
   const [errors, setErrors] = useState<string[]>([])
 
   const [fields, setFields] = useState<NewColorFormFields>({
-    name: defaultSchema? "defaultSchema":"",
+    name: defaultScheme? "defaultScheme":"",
     bgColor: "",
     fontColor: ""
   })
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
-    if (!fields.name) return setErrors(errors.concat("Invalid color schema name"))
+    const errors: string[] = []
+    if (!fields.name) errors.push("Invalid color scheme name")
     const { name, bgColor, fontColor } = fields
     const fieldSet: ColorSettingField = {}
 
     if (bgColor) fieldSet.bgColor = bgColor
     if (fontColor) fieldSet.fontColor = fontColor
-    if (mandatoryColors && (!fieldSet.bgColor && !fieldSet.fontColor)) return setErrors(errors.concat("Set at least the background color or the font color"))
-    addColor({ [name]: fieldSet })
-    afterSubmit()
+    if (mandatoryColors && (!fieldSet.bgColor && !fieldSet.fontColor)) errors.push("Please set at least the background color or the font color")
+    console.log(errors)
+    if (!errors.length){
+      addColor({ [name]: fieldSet })
+      afterSubmit()
+    }
+    setErrors(errors)
   }
 
   const fieldChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,12 +52,14 @@ const NewColorForm = ({ addColor, afterSubmit,defaultSchema, mandatoryColors }: 
   }
   return (
     <form className="flex flex-col p-2 gap-y-2 *:outline-none">
-      <h2 className="font-bold text-lg">New color schema</h2>
+      <h2 className="font-bold text-lg">New color scheme</h2>
       {
         errors.length>0 &&
-        <p className="text-sm text-red-500">{errors.join(", ")}</p>
+        <ul className="text-sm text-red-500 list-inside">
+            {errors.map((e, i) => <li key={i} >{e}</li>)}
+        </ul>
       }
-      <TextField placeholder="Schema name" onChange={fieldChangeEvent} value={fields.name} disabled={defaultSchema} />
+      <TextField placeholder="Scheme name" onChange={fieldChangeEvent} value={fields.name} disabled={defaultScheme} />
       <fieldset className="flex">
 
         <ColorSelector defaultValue="#fff"

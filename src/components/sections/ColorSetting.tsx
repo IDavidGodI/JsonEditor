@@ -1,7 +1,7 @@
 import { ColorResult } from "@uiw/react-color";
 import ColorSelector from "../forms/ColorSelect";
 import XIcon from "../icons/XIcon";
-import { ColorSchemaFields, ColorSettingField } from "../../models/theme";
+import { ColorSchemeFields, ColorSettingField } from "../../models/theme";
 import KeyRename from "./KeyRename";
 import TrashIcon from "../icons/TrashIcon";
 import { useEffect, useRef, useState } from "react";
@@ -12,14 +12,14 @@ interface ColorSettingProps {
   setSelected: (n: string)=>void
   field: ColorSettingField
   colorName: string
-  changeColor: (c: ColorSchemaFields)=>void
+  changeColor: (c: ColorSchemeFields)=>void
   changeName: (n:string, o:string)=>void
   canBeDeleted?: boolean
   deleteColor?: (n: string)=>void
-  defaultSchema?: ColorSettingField
+  defaultScheme?: ColorSettingField
 }
  
-const ColorSetting = ({ canBeDeleted, selected, setSelected, unsetSelected, defaultSchema, field, colorName, changeColor,changeName, deleteColor }: ColorSettingProps) => {
+const ColorSetting = ({ canBeDeleted, selected, setSelected, unsetSelected, defaultScheme, field, colorName, changeColor,changeName, deleteColor }: ColorSettingProps) => {
   const selectedRef = useRef<HTMLDivElement>(null)
   const isSelected = selected === colorName
   const [usedFromDefault, setUsedFromDefault] = useState<string[]>([])
@@ -27,10 +27,10 @@ const ColorSetting = ({ canBeDeleted, selected, setSelected, unsetSelected, defa
   useEffect(()=>{
     const used = []
     
-    if (defaultSchema?.bgColor && !field.bgColor) used.push("background")
-    if (defaultSchema?.fontColor && !field.fontColor) used.push("font")
+    if (defaultScheme?.bgColor && !field.bgColor) used.push("background")
+    if (defaultScheme?.fontColor && !field.fontColor) used.push("font")
     setUsedFromDefault(used)
-  },[defaultSchema, field])
+  },[defaultScheme, field])
   
 
   const toggleSelected = ()=>{
@@ -82,7 +82,7 @@ const ColorSetting = ({ canBeDeleted, selected, setSelected, unsetSelected, defa
           {
             usedFromDefault.length>0 &&
 
-            <p className="text-xs text-slate-500 ">(Using <b>{usedFromDefault.join(" and ")}</b> color{usedFromDefault.length > 1?"s":""} from default schema)</p>
+            <p className="text-xs text-slate-500 ">(Using <b>{usedFromDefault.join(" and ")}</b> color{usedFromDefault.length > 1?"s":""} from default scheme)</p>
           }
         </span>
         {
@@ -94,10 +94,10 @@ const ColorSetting = ({ canBeDeleted, selected, setSelected, unsetSelected, defa
 
       </div>
       <div {...{ ref: isSelected ? selectedRef : null }} onClick={toggleSelected} className="h-16 w-full p-1  cursor-pointer hover:bg-black/20">
-        <div className="w-full h-full flex items-center p-1 justify-between" style={{ backgroundColor: field?.bgColor || defaultSchema?.bgColor, color: field?.fontColor || defaultSchema?.fontColor }}>
+        <div className="w-full h-full flex items-center p-1 justify-between" style={{ backgroundColor: field?.bgColor || defaultScheme?.bgColor, color: field?.fontColor || defaultScheme?.fontColor }}>
 
           {
-            (field.bgColor || field.fontColor) || !!defaultSchema?
+            (field.bgColor || field.fontColor) || !!defaultScheme?
               <p className="font-bold text-2xl align-baseline">
                 Aa
               </p>

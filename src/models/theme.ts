@@ -26,13 +26,13 @@ export interface ColorSettingField{
   fontColor?: string
 }
 
-export interface ColorSchemaFields{
+export interface ColorSchemeFields{
   [key: string]: ColorSettingField
 }
 
 export interface ColorSettingFields{
-  defaultSchema?: ColorSettingField
-  schemas?: ColorSchemaFields
+  defaultScheme?: ColorSettingField
+  schemes?: ColorSchemeFields
 }
 
 export interface ThemeFields{

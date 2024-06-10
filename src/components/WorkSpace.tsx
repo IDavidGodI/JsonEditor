@@ -49,12 +49,15 @@ const WorkSpace = ({ setLoadedFile, loadedFile, setFloating, setMainFile, file, 
         
         <footer className="transition-all duration-700 grow shadow-inner overflow-y-auto relative ">
         <div className="w-full ">
-            <header className="sticky top-0 bg-white p-2 border-dotted border-b-2 z-50">
+            <header className="sticky top-0 bg-white p-2 border-dotted border-b-2 z-40">
               <h2 className="text-xl font-bold  p-4">Visual editor</h2>
             </header>
-            <PiecesSection floating={floating} file={file} setFloating={setFloating} closeFloating={closeFloating} loadedFile={loadedFile} setLoadedFile={setLoadedFile}/>
-            <BoardSection floating={floating} file={file} setFloating={setFloating} closeFloating={closeFloating} loadedFile={loadedFile} setLoadedFile={setLoadedFile} />
-            <ColorSettingSection floating={floating} file={file} loadedFile={loadedFile} setLoadedFile={setLoadedFile} setFloating={setFloating} closeFloating={closeFloating}/>
+            <menu className="z-0">
+
+              <PiecesSection floating={floating} file={file} setFloating={setFloating} closeFloating={closeFloating} loadedFile={loadedFile} setLoadedFile={setLoadedFile}/>
+              <BoardSection floating={floating} file={file} setFloating={setFloating} closeFloating={closeFloating} loadedFile={loadedFile} setLoadedFile={setLoadedFile} />
+              <ColorSettingSection floating={floating} file={file} loadedFile={loadedFile} setLoadedFile={setLoadedFile} setFloating={setFloating} closeFloating={closeFloating}/>
+            </menu>
         </div>
           
           
