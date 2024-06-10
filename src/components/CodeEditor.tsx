@@ -48,7 +48,6 @@ const CodeEditor = (({tab, tabs, saveAction, setTab, onChange}: CodeEditorProps)
   };
   const selectedTab = tabs.find(t => t.tabName===tab)
   useEffect(() => {
-    console.log("TAB",selectedTab)
     if (editorRef.current) {
         formatJson();
     }

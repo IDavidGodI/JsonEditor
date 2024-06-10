@@ -58,7 +58,7 @@ const KeyRename = ({name,updateName}: KeyRenameProps) => {
       {
         isSelected ?
           <form  className="flex flex-col">
-            <input className={cn("outline-none border-2",{
+            <input className={cn("outline-none border-2 px-2",{
               "border-b-2 border-red-500": isError
             })} 
               onChange={(e)=>{

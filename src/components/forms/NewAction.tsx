@@ -23,10 +23,11 @@ const initialValues = {
 const NewActionForm = ({ addAction, afterSubmit, defaultValues}: NewActionFormProps) => {
 
   const [fields, setFields] = useState<NewActionFormFields>({...initialValues, ...defaultValues})
+  const [error, setError] = useState("")
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
-    if (!fields.name) return
+    if (!fields.name) return setError("Invalid action name")
     const { name, frames, fps } = fields
     const fieldSet: ActionField = {frames: Number(frames)}
 
@@ -39,7 +40,11 @@ const NewActionForm = ({ addAction, afterSubmit, defaultValues}: NewActionFormPr
   const fieldChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value} = e.target;
     const { name } = e.target;
-    if (name==="name") value = formatKeyName(value)
+    if (name==="name") {
+      if (!value) setError("Invalid action name")
+      else setError("")
+      value = formatKeyName(value)
+    }
     if (name==="frames" || name==="fps"){
       const numericValue = Number(value)
       
@@ -59,6 +64,10 @@ const NewActionForm = ({ addAction, afterSubmit, defaultValues}: NewActionFormPr
       <h2 className="font-bold text-lg">{
         !defaultValues ?"New action":"Update action"
       }</h2>
+      {
+        error &&
+        <p className="text-sm text-red-500">{error}</p>
+      }
       <TextField name="name" placeholder="Name" onChange={fieldChangeEvent} value={fields.name} disabled={!!defaultValues}/>
       <fieldset className="flex flex-col gap-y-3 w-72 *:w-full">
         <div className="flex flex-col">
