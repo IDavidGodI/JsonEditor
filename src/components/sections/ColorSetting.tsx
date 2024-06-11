@@ -28,7 +28,7 @@ const ColorSetting = ({ canBeDeleted, selected, setSelected, unsetSelected, defa
     const used = []
     
     if (defaultScheme?.bgColor && !field.bgColor) used.push("background")
-    if (defaultScheme?.fontColor && !field.fontColor) used.push("font")
+    if (defaultScheme?.fgColor && !field.fgColor) used.push("font")
     setUsedFromDefault(used)
   },[defaultScheme, field])
   
@@ -66,11 +66,11 @@ const ColorSetting = ({ canBeDeleted, selected, setSelected, unsetSelected, defa
             })}
             title="Background"
           />
-          <ColorSelector defaultValue={field.fontColor || "#fff"}
+          <ColorSelector defaultValue={field.fgColor || "#fff"}
             onChange={(color: ColorResult) => changeColor({
-              [colorName]: { ...field, fontColor: color.hex }
+              [colorName]: { ...field, fgColor: color.hex }
             })}
-            title="Font"
+            title="Foreground "
           />
         </>
       }
@@ -94,10 +94,10 @@ const ColorSetting = ({ canBeDeleted, selected, setSelected, unsetSelected, defa
 
       </div>
       <div {...{ ref: isSelected ? selectedRef : null }} onClick={toggleSelected} className="h-16 w-full p-1  cursor-pointer hover:bg-black/20">
-        <div className="w-full h-full flex items-center p-1 justify-between" style={{ backgroundColor: field?.bgColor || defaultScheme?.bgColor, color: field?.fontColor || defaultScheme?.fontColor }}>
+        <div className="w-full h-full flex items-center p-1 justify-between" style={{ backgroundColor: field?.bgColor || defaultScheme?.bgColor, color: field?.fgColor || defaultScheme?.fgColor }}>
 
           {
-            (field.bgColor || field.fontColor) || !!defaultScheme?
+            (field.bgColor || field.fgColor) || !!defaultScheme?
               <p className="font-bold text-2xl align-baseline">
                 Aa
               </p>

@@ -23,7 +23,7 @@ export interface BoardFields{
 
 export interface ColorSettingField{
   bgColor?: string
-  fontColor?: string
+  fgColor?: string
 }
 
 export interface ColorSchemeFields{

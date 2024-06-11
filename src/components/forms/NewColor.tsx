@@ -13,7 +13,7 @@ interface NewColorFormProps {
 interface NewColorFormFields {
   name: string,
   bgColor?: string
-  fontColor?: string
+  fgColor?: string
 }
 const NewColorForm = ({ addColor, afterSubmit,defaultScheme, mandatoryColors }: NewColorFormProps) => {
 
@@ -22,19 +22,19 @@ const NewColorForm = ({ addColor, afterSubmit,defaultScheme, mandatoryColors }: 
   const [fields, setFields] = useState<NewColorFormFields>({
     name: defaultScheme? "defaultScheme":"",
     bgColor: "",
-    fontColor: ""
+    fgColor: ""
   })
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
     const errors: string[] = []
     if (!fields.name) errors.push("Invalid color scheme name")
-    const { name, bgColor, fontColor } = fields
+    const { name, bgColor, fgColor } = fields
     const fieldSet: ColorSettingField = {}
 
     if (bgColor) fieldSet.bgColor = bgColor
-    if (fontColor) fieldSet.fontColor = fontColor
-    if (mandatoryColors && (!fieldSet.bgColor && !fieldSet.fontColor)) errors.push("Please set at least the background color or the font color")
+    if (fgColor) fieldSet.fgColor = fgColor
+    if (mandatoryColors && (!fieldSet.bgColor && !fieldSet.fgColor)) errors.push("Please set at least the background color or the font color")
     console.log(errors)
     if (!errors.length){
       addColor({ [name]: fieldSet })
@@ -67,8 +67,8 @@ const NewColorForm = ({ addColor, afterSubmit,defaultScheme, mandatoryColors }: 
           title="Background color"
         />
         <ColorSelector defaultValue="#fff"
-          onChange={(e) => colorChangeEvent("fontColor", e.hex)}
-          title="Font color"
+          onChange={(e) => colorChangeEvent("fgColor", e.hex)}
+          title="Foreground color"
         />
       </fieldset>
       <button onClick={handleSubmit} className="bg-sky-500 hover:bg-sky-600 text-white p-2">Agregar</button>
