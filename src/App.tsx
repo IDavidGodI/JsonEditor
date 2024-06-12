@@ -5,7 +5,7 @@ import { OnChange } from "@monaco-editor/react"
 import { ThemeFields } from "./models/theme";
 import CloudIcons from "./components/icons/CloudIcons";
 import XIcon from "./components/icons/XIcon";
-import { cn } from "./utils";
+import { cn, mergeDicts } from "./utils";
 import Button from "./components/UI/Button";
 import lodash from "lodash"
 import InfoDialog from "./components/UI/InfoDialog";
@@ -118,7 +118,10 @@ function App() {
   })
   
   const validJson = isValidJson(modified)
-  const file = { ...mainFile, ...stableModified }
+  const file = mergeDicts(mainFile || {}, stableModified || {})
+
+  
+  console.groupEnd()
   return (
     <main className="w-screen h-screen flex">
       <section className={cn("flex flex-col h-full relative",{

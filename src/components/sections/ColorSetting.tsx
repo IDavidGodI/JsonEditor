@@ -28,7 +28,7 @@ const ColorSetting = ({ canBeDeleted, selected, setSelected, unsetSelected, defa
     const used = []
     
     if (defaultScheme?.bgColor && !field.bgColor) used.push("background")
-    if (defaultScheme?.fgColor && !field.fgColor) used.push("font")
+    if (defaultScheme?.fgColor && !field.fgColor) used.push("foreground")
     setUsedFromDefault(used)
   },[defaultScheme, field])
   
