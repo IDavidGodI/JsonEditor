@@ -5,7 +5,7 @@ import { OnChange } from "@monaco-editor/react"
 import { ThemeFields } from "./models/theme";
 import CloudIcons from "./components/icons/CloudIcons";
 import XIcon from "./components/icons/XIcon";
-import { cn, mergeDicts } from "./utils";
+import { cn, mergeObjects } from "./utils";
 import Button from "./components/UI/Button";
 import lodash from "lodash"
 import InfoDialog from "./components/UI/InfoDialog";
@@ -118,7 +118,7 @@ function App() {
   })
   
   const validJson = isValidJson(modified)
-  const file = mergeDicts(mainFile || {}, stableModified || {})
+  const file = mergeObjects(mainFile || {}, stableModified || {})
 
   
   console.groupEnd()
